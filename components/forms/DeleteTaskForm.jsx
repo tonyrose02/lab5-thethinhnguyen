@@ -1,40 +1,24 @@
 'use client'
 import {useFormState} from 'react-dom'
-import { useState } from 'react'
+
 import {toast} from 'sonner'
 
 import {cn} from '@/lib/utils/mergeCss'
-import { editAction } from '@/actions/editTaskAction'
+import { deleteAction } from '@/actions/deleteTaskAction'
 import {FormControl, Input, Label} from '.'
 
 const initialState = {
 	message: 'default',
 }
 
-function EditTaskForm({children, className,uid,payload}) {
-
-	const [state, formAction] = useFormState(editAction, initialState)
-	const [category,setCategory] = useState(payload.category)
-	const [task,setTask] = useState(payload.task)
-
-	function handleInput (e)
-	{
-	  switch(e.currentTarget.name){
-		case'category':
-			setCategory(e.currentTarget.value)
-			break
-		case 'task':
-			setTask(e.currentTarget.value)
-			break
-		default:
-			null
-	  }
-	}
-
+function DeleteTaskForm({children, className,uid,payload}) {
+	// formAction is for server and client communication
+	const [state, formAction] = useFormState(deleteAction, initialState)
+	const {task,category} = payload
 	if (state.message === 'success') {
 		toast(
 			<aside className="bg-green-500 text-lime-50 rounded-lg py-6 text-center">
-				<p> Your Item have saved successfully</p>
+				<p> Your Item have removed successfully</p>
 			</aside>
 		)
 	}
@@ -47,22 +31,23 @@ function EditTaskForm({children, className,uid,payload}) {
 				</h2>
 			</header>
 			<form action={formAction} className={cn('space-y-5  bg-white    py-8 px-4', className)}>
-				<FormControl>
-					<Input type="hidden" id="uid" name="uid" value={uid} />
+
+			<FormControl >
+					<Input hidden id="uid" name="uid" value={uid}/>
 				</FormControl>
 
 				<FormControl className="flex flex-col">
 					<Label htmlFor="category">Category</Label>
-					<Input onInput={handleInput} id="category" name="category" placeholder="enter the task category"  defaultValue={category} />
+					<Input id="category" name="category" defaultValue={category}/>
 				</FormControl>
 
 				<FormControl className="flex flex-col">
 					<Label htmlFor="task">Task</Label>
-					<Input onInput={handleInput} id="task" name="task" placeholder="enter a new task" defaultValue={task} />
+					<Input id="task" name="task" defaultValue={task}/>
 				</FormControl>
 				<FormControl className="pt-3">
 					<button className="bg-black text-white w-full py-2.5 rounded-lg mt-3 font-semibold">
-						Update Task
+						Delete Task
 					</button>
 				</FormControl>
 			</form>
@@ -70,4 +55,4 @@ function EditTaskForm({children, className,uid,payload}) {
 	)
 }
 
-export {EditTaskForm}
+export {DeleteTaskForm}
