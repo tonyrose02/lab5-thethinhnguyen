@@ -17,7 +17,7 @@ export async function addAction(prevState, formData) {
 	// grab the key create
 	// revalidate the page  revalidate('/')
 	// message to the form.
-	revalidatePath('/demo')
+
 	return {message: response}
 }
 
